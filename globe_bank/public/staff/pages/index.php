@@ -1,12 +1,7 @@
 <?php require_once('../../../private/initialize.php') ?>
 
 <?php
-    $pages = [
-        ['id' => '1', 'title' => '1', 'visiable' => '1', 'menu_name' => 'Page1'],
-        ['id' => '2', 'title' => '2', 'visiable' => '1', 'menu_name' => 'Page2'],
-        ['id' => '3', 'title' => '3', 'visiable' => '1', 'menu_name' => 'Page3'],
-        ['id' => '4', 'title' => '4', 'visiable' => '1', 'menu_name' => 'Page4'],
-    ]
+    $page_set = find_all_pages();
 ?>
 
 <?php $page_title = 'Pages' ?>
@@ -17,36 +12,37 @@
         <h1>Pages</h1>
 
         <div class="actions">
-            <a class="action" href="">Create New Subject</a>
+            <a class="action" href="<?php echo url_for('/staff/pages/new.php') ?>">Create New Page</a>
         </div>
-        
+        <br/>
         <table class="list">
             <tr>
                 <th>ID</th>
-                <th>Title</th>
-                <th>Visiable</th>
+                <th>Subject ID</th>
+                <th>Position</th>
+                <th>visible</th>
                 <th>Name</th>
                 <th>&nbsp;</th>
                 <th>&nbsp;</th>
                 <th>&nbsp;</th>
             </tr>
-            <?php foreach($pages as $page){ ?>
+            <?php while($page = mysqli_fetch_assoc($page_set)){ ?>
                 <tr>
                     <td><?php echo h($page['id']); ?></td>
-                    <td><?php echo h($page['title']); ?></td>
-                    <td><?php echo $page['visiable'] == 1? 'true' : 'false'; ?></td>
+                    <td><?php echo h($page['subject_id']); ?></td>
+                    <td><?php echo h($page['position']); ?></td>
+                    <td><?php echo $page['visible'] == 1? 'true' : 'false'; ?></td>
                     <td><?php echo h($page['menu_name']); ?></td>
-                    <td><a href="<?php echo url_for('/staff/pages/show.php?id=' . h(u($page['id']))) ?>">Move</a></td>
-                    <td><a class="action" href="">Edit</a></td>
+                    <td><a href="<?php echo url_for('/staff/pages/show.php?id=' . h(u($page['id']))) ?>">View</a></td>
+                    <td><a class="action" href="<?php echo url_for('/staff/pages/edit.php?id=' . h(u($page['id']))) ?>">Edit</a></td>
                     <td><a class="action" href="">Delete</a></td>
                 </tr>
             <?php } ?>
-        
-        
         </table>
+        <?php
+            mysqli_free_result($page_set);
+        ?>
     </div>
-
-
 </div>
 
 <?php include(SHARED_PATH . '/staff_footer.php') ?>
